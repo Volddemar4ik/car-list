@@ -46,7 +46,7 @@ const StyledMenu = styled((props) => (
     },
 }))
 
-export default function ActionMenu({ setCars, cars, car }) {
+export default function ActionMenu({ setCars, setMatchedCars, cars, matchedCars, car }) {
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
 
@@ -81,9 +81,9 @@ export default function ActionMenu({ setCars, cars, car }) {
                 open={open}
                 onClose={handleCloseActionMenu}
             >
-                <ModalEdit type={'edit'} setCars={setCars} cars={cars} car={car} closeActionMenu={handleCloseActionMenu} />
+                <ModalEdit type={'edit'} setCars={setCars} setMatchedCars={setMatchedCars} cars={cars} matchedCars={matchedCars} car={car} closeActionMenu={handleCloseActionMenu} />
 
-                <ModalDelete setCars={setCars} cars={cars} car={car} closeActionMenu={handleCloseActionMenu} />
+                <ModalDelete setCars={setCars} setMatchedCars={setMatchedCars} cars={cars} matchedCars={matchedCars} car={car} closeActionMenu={handleCloseActionMenu} />
             </StyledMenu>
         </React.Fragment>
     )

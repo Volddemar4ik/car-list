@@ -6,14 +6,13 @@ const functions = {
     'editCarsData': function editCarsData(carsArray, carData) {
         return carsArray.map(item => {
             if (item?.id === carData?.id) {
-                return carData;
+                return carData
             }
-            return item;
+            return item
         })
     },
 
     'maxIndexFind': function maxIndexFind(carsArray) {
-        console.log('carsArray: ', carsArray)
         return Math.max(...carsArray?.map(item => item?.id)) + 1
     },
 
@@ -21,7 +20,7 @@ const functions = {
         const carDataItem = {}
 
         dataArray.map(item => {
-            if (item?.id !== 'Actions') {
+            if (item?.id !== 'actions') {
                 carDataItem[item?.id] = ''
 
                 if (item?.id === 'availability') {
@@ -33,8 +32,34 @@ const functions = {
         return carDataItem
     },
 
-    'search': function search() {
+    'search': function search(carsArray, searchData) {
+        const matchedObjects = []
+        const regexForSearch = /[ ,.:]+/
 
+        const resultArray = searchData.split(regexForSearch)
+
+        for (const result of resultArray) {
+            const foundObjects = carsArray?.filter((car) => {
+                for (const key in car) {
+                    if (car.hasOwnProperty(key) && String(car[key])?.toLowerCase()?.includes(result.toLowerCase())) {
+                        return true
+                    }
+                }
+                return false
+            })
+
+            matchedObjects.push(...foundObjects)
+        }
+
+        return matchedObjects
+    },
+
+    'validCarData': function (data) {
+        for (const key in data) {
+            if (data.hasOwnProperty(key) && data[key] === '')
+                return false
+        }
+        return true
     }
 }
 

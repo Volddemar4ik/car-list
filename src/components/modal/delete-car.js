@@ -16,7 +16,7 @@ const style = {
     p: 4,
 }
 
-export default function ModalDelete({ setCars, cars, car, closeActionMenu }) {
+export default function ModalDelete({ setCars, setMatchedCars, cars, matchedCars, car, closeActionMenu }) {
     const [open, setOpen] = useState(false)
 
     function handleOpenModalWindow() {
@@ -29,6 +29,7 @@ export default function ModalDelete({ setCars, cars, car, closeActionMenu }) {
 
     function handleConfirmDeleteCar() {
         setCars(functions.removeCarFromList(cars, car?.id))
+        setMatchedCars(functions.removeCarFromList(matchedCars, car?.id))
         closeActionMenu()
     }
 

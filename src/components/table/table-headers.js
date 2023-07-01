@@ -48,7 +48,7 @@ export const tableHeaders = [
         isEdited: true
     },
     {
-        id: 'Actions',
+        id: 'actions',
         label: 'Actions',
         minWidth: 100,
         isEdited: false

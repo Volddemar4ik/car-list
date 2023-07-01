@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Button, Typography, Modal, MenuItem, TextField, Checkbox, FormControlLabel } from '@mui/material'
 import { Check, Clear, Edit, AddCircleOutline } from '@mui/icons-material'
 import { tableHeaders } from '../table/table-headers'
@@ -17,10 +17,15 @@ const style = {
     p: 4,
 }
 
-export default function ModalEdit({ type, setCars, cars, car, closeActionMenu }) {
+export default function ModalEdit({ type, setCars, setMatchedCars, cars, matchedCars, car, closeActionMenu }) {
     let currentCarData = car || functions.createCarDataItem(tableHeaders)
     const [open, setOpen] = useState(false)
     const [carData, setCarData] = useState(currentCarData)
+    const [isCarDataValid, setIsCarDataValid] = useState(false)
+
+    useEffect(() => {
+        setIsCarDataValid(functions.validCarData(carData))
+    }, [carData])
 
     function handleOpenModalWindow() {
         setOpen(true)
@@ -33,6 +38,7 @@ export default function ModalEdit({ type, setCars, cars, car, closeActionMenu })
     function handleConfirm() {
         if (type === 'edit') {
             setCars(functions.editCarsData(cars, carData))
+            setMatchedCars(functions.editCarsData(matchedCars, carData))
             setOpen(false)
             closeActionMenu()
         } else {
@@ -80,7 +86,7 @@ export default function ModalEdit({ type, setCars, cars, car, closeActionMenu })
                         tableHeaders?.map((item) => {
                             const value = carData[item?.id]
 
-                            if (item?.id !== 'Actions' && item?.id !== 'availability') {
+                            if (item?.id !== 'actions' && item?.id !== 'availability') {
                                 return (
                                     <TextField
                                         key={item?.id}
@@ -126,6 +132,7 @@ export default function ModalEdit({ type, setCars, cars, car, closeActionMenu })
                             variant="contained"
                             color='primary'
                             fullWidth
+                            disabled={!isCarDataValid}
                             style={{
                                 marginTop: '20px'
                             }}

@@ -3,7 +3,7 @@ import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 import ActionMenu from '../action-menu/action-menu'
 import { tableHeaders } from './table-headers'
 
-export default function MainCarTable({ cars, setCars }) {
+export default function MainCarTable({ displayData, cars, setCars, matchedCars, setMatchedCars }) {
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(7)
 
@@ -13,7 +13,7 @@ export default function MainCarTable({ cars, setCars }) {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ height: 510 }}>
+            <TableContainer sx={{ height: 530 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow >
@@ -29,7 +29,7 @@ export default function MainCarTable({ cars, setCars }) {
                     </TableHead>
 
                     <TableBody>
-                        {cars
+                        {displayData
                             ?.slice((page - 1) * rowsPerPage, (page - 1) * rowsPerPage + rowsPerPage)
                             ?.map((car) => {
                                 return (
@@ -52,7 +52,7 @@ export default function MainCarTable({ cars, setCars }) {
                                                             ? (value ? 'Available' : 'Unavailable')
                                                             : (value
                                                                 ? value
-                                                                : <ActionMenu setCars={setCars} cars={cars} car={car} />)
+                                                                : <ActionMenu setCars={setCars} setMatchedCars={setMatchedCars} cars={cars} matchedCars={matchedCars} car={car} />)
                                                     }
                                                 </TableCell>
                                             )
@@ -65,7 +65,7 @@ export default function MainCarTable({ cars, setCars }) {
             </TableContainer>
 
             <Pagination
-                count={Math.ceil(cars?.length / rowsPerPage)}
+                count={Math.ceil(displayData?.length / rowsPerPage)}
                 page={page}
                 onChange={handleChangePage}
                 boundaryCount={1}
