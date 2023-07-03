@@ -16,7 +16,6 @@ export default function App() {
   const [loadingCarsData, setloadingCarsData] = useState(false)
   const [searchData, setSearchData] = useState('')
   const [showAllData, setShowAllData] = useState(true)
-  console.log('cars: ', cars)
 
   function handleStartSearchin() {
     if (searchData !== '') {
