@@ -1,0 +1,29 @@
+.car-list-wrapper {
+    margin: 0 auto;
+    padding: 10px 50px;
+
+    .car-list__search {
+        display: flex;
+        justify-content: center;
+        margin: 10px auto;
+        background-color: #d5f1f7;
+        border-radius: 4px;
+        max-width: 500px;
+        padding-left: 20px;
+    }
+
+    .car-list__search-icon {
+        padding: 10px;
+    }
+
+    .car-list__load-progress-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+    }
+
+    .car-list__create-new-car {
+        margin-top: 20px;
+    }
+}

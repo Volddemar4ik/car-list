@@ -1,27 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { Box, Button, Typography, Modal, MenuItem, TextField, Checkbox, FormControlLabel } from '@mui/material'
 import { Check, Clear, Edit, AddCircleOutline } from '@mui/icons-material'
 import { tableHeaders } from '../table/table-headers'
 import functions from '../functions/functions'
+import { CurrentCarsData } from '../app/App'
+import './style.scss'
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxWidth: 500,
-    width: 300,
-    bgcolor: 'background.paper',
-    borderRadius: '4px',
-    boxShadow: 24,
-    p: 4,
-}
-
-export default function ModalEdit({ type, setCars, setMatchedCars, cars, matchedCars, car, closeActionMenu }) {
+export default function ModalEdit({ type, car, closeActionMenu }) {
     let currentCarData = car || functions.createCarDataItem(tableHeaders)
     const [open, setOpen] = useState(false)
     const [carData, setCarData] = useState(currentCarData)
     const [isCarDataValid, setIsCarDataValid] = useState(false)
+    const currentCarsData = useContext(CurrentCarsData)
 
     useEffect(() => {
         setIsCarDataValid(functions.validCarData(carData))
@@ -33,16 +23,21 @@ export default function ModalEdit({ type, setCars, setMatchedCars, cars, matched
 
     function handleCloseModalWindow() {
         setOpen(false)
+        if (type === 'edit') {
+            closeActionMenu()
+        }
     }
 
     function handleConfirm() {
         if (type === 'edit') {
-            setCars(functions.editCarsData(cars, carData))
-            setMatchedCars(functions.editCarsData(matchedCars, carData))
+            currentCarsData.setCars(functions.editCarsData(currentCarsData.cars, carData))
+            currentCarsData.setMatchedCars(functions.editCarsData(currentCarsData.matchedCars, carData))
             setOpen(false)
             closeActionMenu()
-        } else {
-            const newIndex = functions.maxIndexFind(cars)
+        }
+
+        if (type === 'add') {
+            const newIndex = functions.maxIndexFind(currentCarsData.cars)
             const carYear = parseInt(carData?.car_model_year)
             const createNewCar = {
                 id: newIndex,
@@ -50,7 +45,7 @@ export default function ModalEdit({ type, setCars, setMatchedCars, cars, matched
                 car_model_year: carYear
             }
 
-            setCars(prev => [createNewCar, ...prev])
+            currentCarsData.setCars(prev => [createNewCar, ...prev])
             setOpen(false)
         }
     }
@@ -75,13 +70,14 @@ export default function ModalEdit({ type, setCars, setMatchedCars, cars, matched
 
             <Modal
                 open={open}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
+                aria-labelledby="modal window to update car data"
+                aria-describedby="modal window to update car data"
             >
-                <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2" align='center' style={{ marginBottom: '20px' }}>
+                <Box className='modal-window edit-add-modal-window'>
+                    <Typography variant="h6" component="h2" align='center' className='modal-window__title'>
                         Enter new data for car
                     </Typography>
+
                     {
                         tableHeaders?.map((item) => {
                             const value = carData[item?.id]
@@ -98,9 +94,7 @@ export default function ModalEdit({ type, setCars, setMatchedCars, cars, matched
                                         variant="standard"
                                         fullWidth
                                         size='small'
-                                        style={{
-                                            marginBottom: '10px'
-                                        }}
+                                        className='edit-add-modal-window__input'
                                     />
                                 )
                             }
@@ -123,19 +117,13 @@ export default function ModalEdit({ type, setCars, setMatchedCars, cars, matched
                         })
                     }
 
-                    <Box style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        flexWrap: 'wrap'
-                    }}>
+                    <Box className='edit-add-modal-window__action-box'>
                         <Button
                             variant="contained"
                             color='primary'
                             fullWidth
                             disabled={!isCarDataValid}
-                            style={{
-                                marginTop: '20px'
-                            }}
+                            className='edit-add-modal-window__button'
                             onClick={handleConfirm}
                         >
                             <Check />
@@ -146,10 +134,7 @@ export default function ModalEdit({ type, setCars, setMatchedCars, cars, matched
                             variant="contained"
                             color='inherit'
                             onClick={handleCloseModalWindow}
-                            style={{
-                                marginTop: '20px',
-                                width: '80%'
-                            }}
+                            className='edit-add-modal-window__button edit-add-modal-window__button-cancell'
                         >
                             <Clear />
                             Cancel

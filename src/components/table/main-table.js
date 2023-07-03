@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Pagination } from '@mui/material'
 import ActionMenu from '../action-menu/action-menu'
 import { tableHeaders } from './table-headers'
+import './style.scss'
 
-export default function MainCarTable({ displayData, cars, setCars, matchedCars, setMatchedCars }) {
+export default function MainCarTable({ displayData }) {
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(7)
 
@@ -12,16 +13,13 @@ export default function MainCarTable({ displayData, cars, setCars, matchedCars, 
     }
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ height: 530 }}>
-                <Table stickyHeader aria-label="sticky table">
+        <Paper className='main-table-wrapper'>
+            <TableContainer className='main-table'>
+                <Table stickyHeader aria-label="main table woth car list">
                     <TableHead>
                         <TableRow >
                             {tableHeaders?.map((column) => (
-                                <TableCell
-                                    key={column?.id}
-                                    style={{ minWidth: column?.minWidth, textAlign: 'center', fontWeight: 600, backgroundColor: '#f0f8ff' }}
-                                >
+                                <TableCell className='main-table__header-cell' key={column?.id}>
                                     {column?.label}
                                 </TableCell>
                             ))}
@@ -43,16 +41,13 @@ export default function MainCarTable({ displayData, cars, setCars, matchedCars, 
                                             const value = car[column?.id]
 
                                             return (
-                                                <TableCell
-                                                    key={column?.id}
-                                                    style={{ textAlign: 'center' }}
-                                                >
+                                                <TableCell className='main-table__body-cell' key={column?.id} >
                                                     {
                                                         typeof value === 'boolean'
                                                             ? (value ? 'Available' : 'Unavailable')
                                                             : (value
                                                                 ? value
-                                                                : <ActionMenu setCars={setCars} setMatchedCars={setMatchedCars} cars={cars} matchedCars={matchedCars} car={car} />)
+                                                                : <ActionMenu car={car} />)
                                                     }
                                                 </TableCell>
                                             )
@@ -74,11 +69,7 @@ export default function MainCarTable({ displayData, cars, setCars, matchedCars, 
                 size="large"
                 showFirstButton
                 showLastButton
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    margin: '15px 0'
-                }}
+                className='main-table__pagination'
             />
         </Paper>
     )

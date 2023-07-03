@@ -1,23 +1,14 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Box, Button, Typography, Modal, MenuItem } from '@mui/material'
 import { Delete, Check, Clear } from '@mui/icons-material'
 import functions from '../functions/functions'
+import { CurrentCarsData } from '../app/App'
+import './style.scss'
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxWidth: 400,
-    minWidth: 300,
-    bgcolor: 'background.paper',
-    borderRadius: '4px',
-    boxShadow: 24,
-    p: 4,
-}
-
-export default function ModalDelete({ setCars, setMatchedCars, cars, matchedCars, car, closeActionMenu }) {
+export default function ModalDelete({ car, closeActionMenu }) {
     const [open, setOpen] = useState(false)
+
+    const currentCarsData = useContext(CurrentCarsData)
 
     function handleOpenModalWindow() {
         setOpen(true)
@@ -25,11 +16,12 @@ export default function ModalDelete({ setCars, setMatchedCars, cars, matchedCars
 
     function handleCloseModalWindow() {
         setOpen(false)
+        closeActionMenu()
     }
 
     function handleConfirmDeleteCar() {
-        setCars(functions.removeCarFromList(cars, car?.id))
-        setMatchedCars(functions.removeCarFromList(matchedCars, car?.id))
+        currentCarsData.setCars(functions.removeCarFromList(currentCarsData.cars, car?.id))
+        currentCarsData.setMatchedCars(functions.removeCarFromList(currentCarsData.matchedCars, car?.id))
         closeActionMenu()
     }
 
@@ -42,28 +34,20 @@ export default function ModalDelete({ setCars, setMatchedCars, cars, matchedCars
 
             <Modal
                 open={open}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
+                aria-labelledby="modal window for delete car"
+                aria-describedby="modal window for delete car"
             >
-                <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2" align='center'>
+                <Box className='modal-window delete-modal-window'>
+                    <Typography variant="h6" component="h2" align='center' className='modal-window__title'>
                         Are you sure you want to delete this car?
                     </Typography>
 
-                    <Box style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '80%',
-                        margin: '0 auto',
-                        marginTop: '20px'
-                    }}>
+                    <Box className='delete-modal-window__action-box'>
                         <Button
                             variant="contained"
                             color='inherit'
                             onClick={handleConfirmDeleteCar}
-                            style={{
-                                minWidth: '90px'
-                            }}
+                            className='delete-modal-window__button'
                         >
                             <Check />
                             Yes
@@ -73,9 +57,7 @@ export default function ModalDelete({ setCars, setMatchedCars, cars, matchedCars
                             variant="contained"
                             color='primary'
                             onClick={handleCloseModalWindow}
-                            style={{
-                                minWidth: '90px'
-                            }}
+                            className='delete-modal-window__button'
                         >
                             <Clear />
                             No

@@ -35,7 +35,6 @@ const functions = {
     'search': function search(carsArray, searchData) {
         const matchedObjects = []
         const regexForSearch = /[ ,.:]+/
-
         const resultArray = searchData.split(regexForSearch)
 
         for (const result of resultArray) {
@@ -48,7 +47,7 @@ const functions = {
                 return false
             })
 
-            matchedObjects.push(...foundObjects)
+            matchedObjects.unshift(...foundObjects)
         }
 
         return matchedObjects
